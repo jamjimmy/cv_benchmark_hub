@@ -1,0 +1,39 @@
+keys:
+  target: gt
+  pred: pred
+
+path_key: test # Choice. Only files with 'test' in their name in the input directory will be processed.
+
+metrics:
+  ssim: # custom test name
+    metric:  # metric class
+      class: src.metric.ssim.SSIM
+      batch_size: 100
+      device: cuda
+    
+      
+  clip_score:
+    metric:
+      class: src.metric.clip_score.ClipScore
+      clip_model: openai/clip-vit-base-patch16
+      device: cuda
+    special_target_key: prompt # custom key
+    special_pred_key: pred  
+    special_input_paths:
+      - example_data/example_data.json
+    just_special_input_paths: true # if true, only the special_input_paths will be used
+    
+  psnr_score:
+    metric:
+      class: src.metric.psnr.PSNR
+      device: cuda
+
+  lipis_score:
+    metric:
+      class: src.metric.lpips.LPIPS
+      batch_size: 100
+      device: cuda
+
+
+
+

@@ -1,0 +1,7 @@
+torch
+torchvision
+tqdm
+numpy
+torchmetrics
+pillow
+PyYAML
