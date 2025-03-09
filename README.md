@@ -73,7 +73,7 @@ keys:
 
 Run the benchmark using the following command:
 ```bash
-python benchmark.py --congig config/all.yaml --input_path example_data --output_path ./result/test1
+python benchmark.py --config config/example.yaml --input_path example_data --output_path ./result/test1
 ```
 The result will be saved in `./result/test1` folder. There will be a 'benchmark.xlsx' file.
 
