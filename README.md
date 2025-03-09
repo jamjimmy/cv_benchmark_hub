@@ -1,5 +1,5 @@
 # Computer Vision Benchmark Hub
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)  📫[![Outlook](https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white)](mailto:jiangzj453@outlook.com)
+[![Outlook](https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white)](mailto:jiangzj453@outlook.com)
 
 Welcome to the Computer Vision Benchmark Hub — a flexible and user-friendly tool designed to evaluate and benchmark image-based models.  With support for key metrics such as SSIM, PSNR, CLIP-Score, and more, our platform enables seamless one-click evaluations, helping you compare and optimize model performance effortlessly.
 
