@@ -22,9 +22,10 @@ def get_class(class_path):
 def postprocess(results, args, metric_name):
     df = pd.DataFrame(results)
     os.makedirs(args.output_path, exist_ok=True)
-    df.to_excel(os.path.join(args.output_path, 'benchmark.xlsx'), sheet_name=metric_name, index=False)
-    
-    
+    excel_path = os.path.join(args.output_path, 'benchmark.xlsx')
+    mode = 'a' if os.path.exists(excel_path) else 'w'
+    with pd.ExcelWriter(excel_path, mode=mode) as writer:
+        df.to_excel(writer, sheet_name=metric_name, index=False)
     destination_file = os.path.join(args.output_path, os.path.basename(args.config))
     if os.path.exists(destination_file) == False:
         shutil.copy(args.config, destination_file)
@@ -32,7 +33,7 @@ def postprocess(results, args, metric_name):
 def main(config, args):
 
     
-    columns = ['experiment_name', 'score', 'path', 'pred_key', 'target_key', 'current_datetime']
+    # columns = ['experiment_name', 'score', 'path', 'pred_key', 'target_key', 'current_datetime']
     # table = wandb.Table(columns=columns)
 
     metrics = config.get('metrics', {})
@@ -44,7 +45,7 @@ def main(config, args):
 
     targetKey = config['keys']['target']
     pred_key = config['keys']['pred']
-
+    
     for metric_name, metric_config in metrics.items():
         
         # Instantiate metric class
