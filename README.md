@@ -7,7 +7,7 @@ To get started, simply install the required dependencies:
 ```bash
 conda create -n cv_benchmark python==3.10
 conda activate cv_benchmark
-pip install -r requirements.txt
+pip install -r requirments.txt
 ```
 
 ## 📁 Data Preparation
