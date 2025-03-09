@@ -51,7 +51,8 @@ Alternatively, you can use a JSON file structured like this:
         "args2": "image path or text of pred",
     },
     
-// ...
+...
+
     {
         "args1": "image path or text of target",
         "args2": "image path or text of pred",
