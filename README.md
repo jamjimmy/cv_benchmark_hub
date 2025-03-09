@@ -14,16 +14,31 @@ The toolkit supports two types of inputs: <big>**folders**</big> and <big>**JSON
 ### Folder Structure
 Ensure your input folder is organized as follows:
 ```bash
-
-input_dir 
-├── dir1 
-│   ├── img1.jpg # all the filename must match in each dir
-│   ├── img2.jpg 
-│   └── ...
-└── dir2 
-    ├── img1.jpg
-    ├── img2.jpg
-    └── ...
+input_path
+├── input_dir1 
+|   ├── dir1 
+|   │   ├── img1.jpg # all the filename must match in each dir
+|   │   ├── img2.jpg 
+|   │   └── ...
+|   └── dir2 
+|       ├── img1.jpg
+|       ├── img2.jpg
+|       └── ...
+|
+├── input_dir2 
+|   ├── dir1 
+|       └── ...
+|   └── dir2 
+|       └── ...
+...
+```
+### JSON Format
+Alternatively, you can use a JSON file structured like this:
+```json
+[
+    {
+    
+}
 
 ```
 
