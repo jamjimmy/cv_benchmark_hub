@@ -5,3 +5,5 @@ numpy
 torchmetrics
 pillow
 PyYAML
+openpyxl
+transformers
