@@ -5,7 +5,7 @@ Welcome to the Computer Vision Benchmark Hub — a flexible and user-friendly to
 ## 🚀 Installation
 To get started, simply install the required dependencies:
 ```bash
-conda crfeate -n cv_benchmark python==3.10
+conda create -n cv_benchmark python==3.10
 conda activate cv_benchmark
 pip install -r requirements.txt
 ```
