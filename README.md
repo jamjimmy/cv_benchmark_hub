@@ -16,20 +16,20 @@ Ensure your input folder is organized as follows:
 ```bash
 input_path
 ├── input_dir1 
-|   ├── dir1 
-|   │   ├── img1.jpg # all the filename must match in each dir
-|   │   ├── img2.jpg 
-|   │   └── ...
-|   └── dir2 
-|       ├── img1.jpg
-|       ├── img2.jpg
-|       └── ...
-|
+├   ├── dir1 
+├   │   ├── img1.jpg # all the filename must match in each dir
+├   │   ├── img2.jpg 
+├   │   └── ...
+├   └── dir2 
+├       ├── img1.jpg
+├       ├── img2.jpg
+├       └── ...
+├
 ├── input_dir2 
-|   ├── dir1 
-|       └── ...
-|   └── dir2 
-|       └── ...
+├   ├── dir1 
+├       └── ...
+├   └── dir2 
+├       └── ...
 ...
 ```
 ### JSON Format
@@ -50,7 +50,8 @@ Alternatively, you can use a JSON file structured like this:
         "args1": "image path or text of target",
         "args2": "image path or text of pred",
     },
-    ...
+    
+// ...
     {
         "args1": "image path or text of target",
         "args2": "image path or text of pred",
