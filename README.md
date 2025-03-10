@@ -19,20 +19,20 @@ Ensure your input folder is organized as follows:
 ```bash
 input_path
 ├── input_dir1 
-├   ├── dir1 
-├   │   ├── img1.jpg # all the filename must match in each dir
-├   │   ├── img2.jpg 
-├   │   └── ...
-├   └── dir2 
-├       ├── img1.jpg
-├       ├── img2.jpg
-├       └── ...
-├
+│   ├── dir1 
+│   │   ├── img1.jpg # all the filename must match in each dir
+│   │   ├── img2.jpg 
+│   │   └── ...
+│   └── dir2 
+│       ├── img1.jpg
+│       ├── img2.jpg
+│       └── ...
+│
 ├── input_dir2 
-├   ├── dir1 
-├       └── ...
-├   └── dir2 
-├       └── ...
+│   ├── dir1 
+│       └── ...
+│   └── dir2 
+│       └── ...
 ...
 ```
 
