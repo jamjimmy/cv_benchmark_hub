@@ -11,7 +11,7 @@ transform_img = transforms.Compose([
     lambda x: (x * 255)
 ])
 
-def preprocess_list(target_input, pred_input, device, batch_size=100):
+def preprocess_list(target_input, pred_input, device):
     processed_pred_input = []
     processed_target_input = []
     for target_item, pred_item in zip(target_input, pred_input):
@@ -23,15 +23,13 @@ def preprocess_list(target_input, pred_input, device, batch_size=100):
 
         processed_pred_input.append(transform_img(pred_image).to(device))
         processed_target_input.append(transform_img(target_image).to(device))
-    processed_pred_batch_input = [torch.stack(processed_pred_input[i:i + batch_size]) for i in range(0, len(processed_pred_input), batch_size)]
-    processed_target_input_batch = [torch.stack(processed_target_input[i:i + batch_size]) for i in range(0, len(processed_target_input), batch_size)]
-    return processed_pred_batch_input, processed_target_input_batch
+    
+    return processed_pred_input, processed_target_input
 
 class SSIM(Metric):
-    def __init__(self, device = 'cuda', batch_size=100):
+    def __init__(self, device = 'cuda'):
         self.device = device
         self.ssim = StructuralSimilarityIndexMeasure().to(self.device)
-        self.batch_size = batch_size
 
     def __call__(self, input: str, keys=['target', 'pred']):
         '''
@@ -92,7 +90,7 @@ class SSIM(Metric):
             raise ValueError(f"{input} must be dir or json file")
         
         assert len(target_list) == len(pred_list), f"the number of images in {input} must be the same"
-        processed_target_list, processed_pred_list = preprocess_list(target_list, pred_list, self.device, self.batch_size)
+        processed_target_list, processed_pred_list = preprocess_list(target_list, pred_list, self.device)
         
         score = 0.0
         

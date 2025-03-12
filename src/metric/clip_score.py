@@ -16,13 +16,12 @@ def check_image_path(text):
         if not os.path.exists(text):
             print("Warning: input is an image path, will load image")
 
-def preprocess_list(input, device, batch_size):
+def preprocess_list(input, device):
     processed_input = []
     for item in input:
         if os.path.isfile(item):
             image = Image.open(item)
             processed_input.append(transform_img(image).to(device))
-            # processed_batch_input = [torch.stack(processed_input[i:i + batch_size]) for i in range(0, len(processed_input), batch_size)]
         else:
             processed_input.append(item)
     return processed_input
@@ -39,11 +38,10 @@ def _get_clip_score(input1, input2, metric_model):
     return score.detach().item()
 
 class ClipScore(Metric):
-    def __init__(self, device = 'cuda', clip_model="openai/clip-vit-base-patch16", batch_size=100):
+    def __init__(self, device = 'cuda', clip_model="openai/clip-vit-base-patch16"):
         self.device = device
         self.metric_model = CLIPScore(model_name_or_path=clip_model).to(self.device)
         self.clip_model_name = clip_model
-        self.batch_size = batch_size
     def __call__(self, input: str, keys: list=['gt', 'pred']):
         '''
         Args:
@@ -118,8 +116,8 @@ class ClipScore(Metric):
         
         assert len(input1_list) == len(input2_list), f"the number of images in {input} must be the same"
         
-        processed_input1_list = preprocess_list(input1_list, self.device, self.batch_size)
-        processed_input2_list = preprocess_list(input2_list, self.device, self.batch_size)
+        processed_input1_list = preprocess_list(input1_list, self.device)
+        processed_input2_list = preprocess_list(input2_list, self.device)
         # metric_model = CLIPScore(model_name_or_path=clip_model).to(self.device)
         # score = 0.0
         # for input1, input2 in zip(processed_input1_list, processed_input2_list):

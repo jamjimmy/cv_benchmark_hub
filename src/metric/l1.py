@@ -1,4 +1,4 @@
-from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
+from torchmetrics.regression import MeanSquaredError
 import os
 from PIL import Image
 import json
@@ -7,7 +7,7 @@ import torch
 from .metric import Metric
 transform_img = transforms.Compose([
     transforms.ToTensor(),
-    lambda x: (x * 2) - 1
+    lambda x: (x * 255)
 ])
 
 def preprocess_list(target_input, pred_input, device):
@@ -20,16 +20,14 @@ def preprocess_list(target_input, pred_input, device):
             Warning("Target image size is not equal to pred image size in test PSNR!!!")
             pred_image = pred_image.resize(target_image.size)
 
-        processed_pred_input.append(transform_img(pred_image).to(device))
-        processed_target_input.append(transform_img(target_image).to(device))
+        processed_pred_input.append(torch.flatten(transform_img(pred_image).to(device)))
+        processed_target_input.append(torch.flatten(transform_img(target_image).to(device)))
     return processed_pred_input, processed_target_input
 
-
-class LPIPS(Metric):
+class L1(Metric):
     def __init__(self, device = 'cuda'):
         self.device = device
-        self.lpips = LearnedPerceptualImagePatchSimilarity(net_type='squeeze').to(self.device)
-        
+        self.mean_squared_error = MeanSquaredError().to(device)
     def __call__(self, input: str, keys=['target', 'pred']):
         '''
         Args:
@@ -97,8 +95,6 @@ class LPIPS(Metric):
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score = self.lpips(pred, target)
+                score += self.mean_squared_error(pred, target)
         score = score / len(processed_target_list)
-        return "LPIPS", score.detach().item(), len(target_list)
-
-# print(get_lpips_batch("data/", keys=['gt', 'pred']))
+        return "mean_squared_error", score.detach().item(), len(target_list)
