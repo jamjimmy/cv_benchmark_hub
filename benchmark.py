@@ -24,10 +24,20 @@ def postprocess(results, args, metric_name):
     os.makedirs(args.output_path, exist_ok=True)
     excel_path = os.path.join(args.output_path, 'benchmark.xlsx')
     mode = 'a' if os.path.exists(excel_path) else 'w'
-    with pd.ExcelWriter(excel_path, mode=mode) as writer:
-        df.to_excel(writer, sheet_name=metric_name, index=False)
+    if mode == 'a':
+        with pd.ExcelWriter(excel_path, mode=mode, engine='openpyxl', if_sheet_exists='replace') as writer:
+            if metric_name in writer.book.sheetnames:
+                existing_df = pd.read_excel(excel_path, sheet_name=metric_name)
+                df = pd.concat([existing_df, df], ignore_index=True)
+            df.to_excel(writer, sheet_name=metric_name, index=False)
+    else:
+        with pd.ExcelWriter(excel_path, mode=mode, engine='openpyxl') as writer:
+            if metric_name in writer.book.sheetnames:
+                existing_df = pd.read_excel(excel_path, sheet_name=metric_name)
+                df = pd.concat([existing_df, df], ignore_index=True)
+            df.to_excel(writer, sheet_name=metric_name, index=False)
     destination_file = os.path.join(args.output_path, os.path.basename(args.config))
-    if os.path.exists(destination_file) == False:
+    if not os.path.exists(destination_file):
         shutil.copy(args.config, destination_file)
 
 def main(config, args):
