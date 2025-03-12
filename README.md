@@ -85,7 +85,7 @@ The result will be saved in `./result/test1` folder. There will be a 'benchmark.
 Completed
 - [X] Support Diffusion Metric:SSIM, PSNR, CLIP-Score, LIPIS
 - [ ] generate latex
-- [ ] L1, L2...
+- [X] L1, L2...
 
 - [ ] Upcoming Features
 
