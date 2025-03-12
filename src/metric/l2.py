@@ -1,4 +1,4 @@
-from torchmetrics.functional.pairwise import pairwise_euclidean_distance
+from torchmetrics.functional.pairwise import pairwise_manhattan_distance
 import os
 from PIL import Image
 import json
@@ -23,10 +23,10 @@ def preprocess_list(target_input, pred_input, device):
             pred_image = pred_image.resize(target_image.size)
 
         processed_pred_input.append(torch.flatten(transform_img(pred_image).to(device)).unsqueeze(0))
-        processed_target_input.append(torch.flatten(transform_img(target_image).to(device)))
+        processed_target_input.append(torch.flatten(transform_img(target_image).unsqueeze(0).to(device)).unsqueeze(0))
     return processed_pred_input, processed_target_input
 
-class L2(Metric):
+class L1(Metric):
     def __init__(self, device = 'cuda'):
         self.device = device
     def __call__(self, input: str, keys=['target', 'pred']):
@@ -96,6 +96,6 @@ class L2(Metric):
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score += pairwise_euclidean_distance(pred, target, reduction='mean')
+                score += pairwise_manhattan_distance(pred, target, reduction='mean')
         score = score / len(processed_target_list)
-        return "L1", score.detach().item(), len(target_list)
+        return "L2", score.detach().item(), len(target_list)
