@@ -15,14 +15,14 @@ def preprocess_list(target_input, pred_input, device):
     processed_pred_input = []
     processed_target_input = []
     for target_item, pred_item in tqdm(zip(target_input, pred_input), total=len(target_input)):
-        target_image = Image.open(target_item)
-        pred_image = Image.open(pred_item)
+        target_image = Image.open(target_item).convert('RGB')
+        pred_image = Image.open(pred_item).convert('RGB')
         if target_image.size != pred_image.size:
             Warning("Target image size is not equal to pred image size in test PSNR!!!")
             pred_image = pred_image.resize(target_image.size)
 
-        processed_pred_input.append(transform_img(pred_image).to(device))
-        processed_target_input.append(transform_img(target_image).to(device))
+        processed_pred_input.append(transform_img(pred_image).unsqueeze(0).to(device))
+        processed_target_input.append(transform_img(target_image).unsqueeze(0).to(device))
     
     return processed_pred_input, processed_target_input
 

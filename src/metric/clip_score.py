@@ -20,7 +20,7 @@ def preprocess_list(input, device):
     processed_input = []
     for item in input:
         if os.path.isfile(item):
-            image = Image.open(item)
+            image = Image.open(item).convert('RGB')
             processed_input.append(transform_img(image).to(device))
         else:
             processed_input.append(item)
