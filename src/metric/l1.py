@@ -1,10 +1,12 @@
-from torchmetrics.regression import MeanSquaredError
+from torchmetrics.functional.pairwise import pairwise_manhattan_distance
 import os
 from PIL import Image
 import json
 from torchvision import transforms
 import torch
 from .metric import Metric
+from tqdm import tqdm
+
 transform_img = transforms.Compose([
     transforms.ToTensor(),
     lambda x: (x * 255)
@@ -13,7 +15,7 @@ transform_img = transforms.Compose([
 def preprocess_list(target_input, pred_input, device):
     processed_pred_input = []
     processed_target_input = []
-    for target_item, pred_item in zip(target_input, pred_input):
+    for target_item, pred_item in tqdm(zip(target_input, pred_input), total=len(target_input)):
         target_image = Image.open(target_item)
         pred_image = Image.open(pred_item)
         if target_image.size != pred_image.size:
@@ -27,7 +29,6 @@ def preprocess_list(target_input, pred_input, device):
 class L1(Metric):
     def __init__(self, device = 'cuda'):
         self.device = device
-        self.mean_squared_error = MeanSquaredError().to(device)
     def __call__(self, input: str, keys=['target', 'pred']):
         '''
         Args:
@@ -95,6 +96,6 @@ class L1(Metric):
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score += self.mean_squared_error(pred, target)
+                score += pairwise_manhattan_distance(pred, target, reduction='mean')
         score = score / len(processed_target_list)
         return "mean_squared_error", score.detach().item(), len(target_list)

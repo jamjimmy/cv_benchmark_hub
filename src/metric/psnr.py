@@ -5,6 +5,7 @@ from PIL import Image
 import json
 from torchvision import transforms
 from .metric import Metric
+from tqdm import tqdm
 
 transform_img = transforms.Compose([
         transforms.ToTensor(),
@@ -14,7 +15,7 @@ transform_img = transforms.Compose([
 def preprocess_list(target_input, pred_input, device):
     processed_pred_input = []
     processed_target_input = []
-    for target_item, pred_item in zip(target_input, pred_input):
+    for target_item, pred_item in tqdm(zip(target_input, pred_input), total=len(target_input)):
         target_image = Image.open(target_item)
         pred_image = Image.open(pred_item)
         if target_image.size != pred_image.size:
