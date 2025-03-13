@@ -60,10 +60,10 @@ input_path
 ### 具体Metric配置 
 `Metric：`指定了测试的类
 
-`special_input_paths：`指定了针对特定Metric需要单独测试的 json 或者 dir 路径。
+`special_input_paths：`指定了针对该Metric需要单独测试的 json 或者 dir 路径。
 
 
-`special_keys:`指定特殊的keys(可以任意数量)，keys的顺序在大部分Metric下无影响。
+`special_keys:`指定特殊的keys(可以任意数量)，keys的顺序在大部分Metric下无影响，需要根据Metric类具体确定。
 
 `just_special_input_paths:`设定为true，则只测试special_input_paths,忽略上面指定的通用文件夹。
 
