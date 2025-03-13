@@ -18,7 +18,7 @@ def preprocess_list(target_input, pred_input, device):
         target_image = Image.open(target_item).convert('RGB')
         pred_image = Image.open(pred_item).convert('RGB')
         if target_image.size != pred_image.size:
-            Warning("Target image size is not equal to pred image size in test PSNR!!!")
+            Warning("Target image size is not equal to pred image size in test SSIM!!!")
             pred_image = pred_image.resize(target_image.size)
 
         processed_pred_input.append(transform_img(pred_image).unsqueeze(0).to(device))

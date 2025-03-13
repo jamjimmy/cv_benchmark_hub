@@ -14,7 +14,7 @@ transform_img = transforms.Compose([
 def check_image_path(text):
     if any(ext in text for ext in ['.jpg', '.png', '.jpeg']):
         if not os.path.exists(text):
-            print("Warning: input is an image path, will load image")
+            print("Warning: input is an image path, but can't load image")
 
 def preprocess_list(input, device):
     processed_input = []
@@ -124,7 +124,7 @@ class ClipScore(Metric):
         score = _get_clip_score(processed_input1_list, processed_input2_list, self.metric_model)
             
         # score = score / len(input1_list)
-        return "CLIP_score_{self.clip_model_name}", score, len(input1_list)
+        return f"CLIP_score_{self.clip_model_name}", score, len(input1_list)
 
 
     # print(get_clip_score_batch('/data1/jiangzj/code/benchmark/data/', clip_model="openai/clip-vit-base-patch16",keys=['gt', 'pred'], device='cuda'))
