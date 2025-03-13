@@ -1,4 +1,6 @@
 path_key: test # Choice. Only files with 'test' in their name in the input directory will be processed.
+
+
 keys:
   target: gt
   pred: pred
@@ -9,13 +11,13 @@ metrics:
       metric:
         class: src.metric.clip_score.ClipScore
         clip_model: openai/clip-vit-base-patch16
-        device: cpu
+        device: cuda
 
   clip_image_to_text_score:
     metric:
       class: src.metric.clip_score.ClipScore
       clip_model: openai/clip-vit-base-patch16
-      device: cpu
+      device: cuda
     special_keys: # custom key
        - prompt
        - pred
@@ -26,17 +28,17 @@ metrics:
   ssim: 
     metric:  # metric class
       class: src.metric.ssim.SSIM
-      device: cpu
+      device: cuda
     
   psnr_score:
     metric:
       class: src.metric.psnr.PSNR
-      device: cpu
+      device: cuda
 
   lipis_score:
     metric:
       class: src.metric.lpips.LPIPS
-      device: cpu
+      device: cuda
 
 
 
