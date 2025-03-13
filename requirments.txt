@@ -7,3 +7,4 @@ pillow
 PyYAML
 openpyxl
 transformers
+pandas

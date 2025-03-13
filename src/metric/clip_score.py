@@ -119,11 +119,12 @@ class ClipScore(Metric):
         processed_input1_list = preprocess_list(input1_list, self.device)
         processed_input2_list = preprocess_list(input2_list, self.device)
         # metric_model = CLIPScore(model_name_or_path=clip_model).to(self.device)
-        # score = 0.0
-        # for input1, input2 in zip(processed_input1_list, processed_input2_list):
-        score = _get_clip_score(processed_input1_list, processed_input2_list, self.metric_model)
+        score = 0.0
+        for input1, input2 in zip(processed_input1_list, processed_input2_list):
+
+            score += _get_clip_score(input1, input2, self.metric_model)
             
-        # score = score / len(input1_list)
+        score = score / len(input1_list)
         return f"CLIP_score_{self.clip_model_name}", score, len(input1_list)
 
 

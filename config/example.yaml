@@ -8,16 +8,17 @@ metrics:
   ssim: # custom test name
     metric:  # metric class
       class: src.metric.ssim.SSIM
-      device: cuda
+      device: cpu
     
       
   clip_score:
     metric:
       class: src.metric.clip_score.ClipScore
       clip_model: openai/clip-vit-base-patch16
-      device: cuda
-    special_target_key: prompt # custom key
-    special_pred_key: pred  
+      device: cpu
+    special_keys: # custom key
+       - prompt
+       - pred
     special_input_paths:
       - example_data/example_data.json
     just_special_input_paths: true # if true, only the special_input_paths will be used
@@ -25,12 +26,12 @@ metrics:
   psnr_score:
     metric:
       class: src.metric.psnr.PSNR
-      device: cuda
+      device: cpu
 
   lipis_score:
     metric:
       class: src.metric.lpips.LPIPS
-      device: cuda
+      device: cpu
 
 
 
