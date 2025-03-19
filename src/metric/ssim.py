@@ -98,8 +98,8 @@ class SSIM(Metric):
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score = self.ssim(pred, target)
-        score += score / len(processed_target_list)
+                score += self.ssim(pred, target)
+        score = score / len(processed_target_list)
         return "SSIM", score.detach().item(), len(target_list)
 
 # print(get_ssim_batch("data/", keys=['gt', 'pred']))

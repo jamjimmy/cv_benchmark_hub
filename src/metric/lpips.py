@@ -98,7 +98,7 @@ class LPIPS(Metric):
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score = self.lpips(pred, target)
+                score += self.lpips(pred, target)
         score = score / len(processed_target_list)
         return "LPIPS", score.detach().item(), len(target_list)
 

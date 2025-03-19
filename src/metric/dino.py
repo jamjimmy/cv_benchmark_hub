@@ -114,8 +114,8 @@ class DinoScore(Metric):
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score = _get_dino_score(pred, target, self.dino_model)
-        score += score / len(processed_target_list)
+                score += _get_dino_score(pred, target, self.dino_model)
+        score = score / len(processed_target_list)
         return "DINO", score, len(target_list)
 
 # print(get_ssim_batch("data/", keys=['gt', 'pred']))
