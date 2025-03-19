@@ -6,6 +6,8 @@ import json
 from torchvision import transforms
 from .metric import Metric
 
+from transformers import CLIPImageProcessor, CLIPModel, CLIPTokenizer
+
 transform_img = transforms.Compose([
     transforms.ToTensor(),
     lambda x: (x * 255)

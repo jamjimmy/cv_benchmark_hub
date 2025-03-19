@@ -1,4 +1,4 @@
-from torchmetrics.functional.pairwise import pairwise_euclidean_distance
+from torch import nn
 import os
 from PIL import Image
 import json
@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 transform_img = transforms.Compose([
     transforms.ToTensor(),
-    lambda x: (x * 255)
+    # lambda x: (x * 255)
 ])
 
 def preprocess_list(target_input, pred_input, device):
@@ -19,16 +19,17 @@ def preprocess_list(target_input, pred_input, device):
         target_image = Image.open(target_item).convert('RGB')
         pred_image = Image.open(pred_item).convert('RGB')
         if target_image.size != pred_image.size:
-            Warning("Target image size is not equal to pred image size in test L1!!!")
+            Warning("Target image size is not equal to pred image size in test L2!!!")
             pred_image = pred_image.resize(target_image.size)
 
-        processed_pred_input.append(torch.flatten(transform_img(pred_image).to(device)).unsqueeze(0))
-        processed_target_input.append(torch.flatten(transform_img(target_image).to(device)))
+        processed_pred_input.append(transform_img(pred_image).to(device))
+        processed_target_input.append(transform_img(target_image).to(device))
     return processed_pred_input, processed_target_input
 
-class L2(Metric):
+class L1(Metric):
     def __init__(self, device = 'cuda'):
         self.device = device
+        self.criterion = nn.L1Loss()
     def __call__(self, input: str, keys=['target', 'pred']):
         '''
         Args:
@@ -96,6 +97,6 @@ class L2(Metric):
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score += pairwise_euclidean_distance(pred, target, reduction='mean')
+                score += self.criterion(pred, target).detach().cpu()
         score = score / len(processed_target_list)
-        return "L1", score.detach().item(), len(target_list)
+        return "L1", score.item(), len(target_list)

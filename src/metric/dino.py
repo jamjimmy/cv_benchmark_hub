@@ -1,35 +1,51 @@
-from torch import nn
+from scipy import spatial
+import torch
 import os
 from PIL import Image
 import json
 from torchvision import transforms
-import torch
 from .metric import Metric
-from tqdm import tqdm
 
 transform_img = transforms.Compose([
-    transforms.ToTensor(),
-    # lambda x: (x * 255)
-])
+        transforms.Resize(256, interpolation=3),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    ])
 
-def preprocess_list(target_input, pred_input, device):
-    processed_pred_input = []
-    processed_target_input = []
-    for target_item, pred_item in tqdm(zip(target_input, pred_input), total=len(target_input)):
-        target_image = Image.open(target_item).convert('RGB')
-        pred_image = Image.open(pred_item).convert('RGB')
-        if target_image.size != pred_image.size:
-            Warning("Target image size is not equal to pred image size in test L2!!!")
-            pred_image = pred_image.resize(target_image.size)
+def check_image_path(text):
+    if any(ext in text for ext in ['.jpg', '.png', '.jpeg']):
+        if not os.path.exists(text):
+            print("Warning: input is an image path, will load image")
 
-        processed_pred_input.append(transform_img(pred_image).to(device))
-        processed_target_input.append(transform_img(target_image).to(device))
-    return processed_pred_input, processed_target_input
+def preprocess_list(input, device):
+    processed_input = []
+    for item in input:
+        # if os.path.isfile(item):
+        image = Image.open(item)
+        processed_input.append(transform_img(image).unsqueeze(0).to(device))
+    return processed_input
+def _get_dino_score(input1, input2, metric_model):
+    '''
+    Args:
+        - input1: list
+        - input2: list
+        - dino_model: dino model name or path
+    '''
+    with torch.no_grad():
+        img_feature1 = metric_model(input1).detach().cpu().float()
+        img_feature2 = metric_model(input2).detach().cpu().float()
+        similarity = 1 - spatial.distance.cosine(img_feature1.view(img_feature1.shape[1]), img_feature2.view(img_feature2.shape[1]))
+    return similarity
 
-class L2(Metric):
-    def __init__(self, device = 'cuda'):
+class DinoScore(Metric):
+    def __init__(self, device = 'cuda', dino_model="'dino_vits16'", batch_size=100):
         self.device = device
-        self.criterion = nn.MSELoss()
+        self.batch_size = batch_size
+        self.dino_model = torch.hub.load('facebookresearch/dino:main', dino_model)
+        self.dino_model.eval()
+        self.dino_model.to(self.device)
+
     def __call__(self, input: str, keys=['target', 'pred']):
         '''
         Args:
@@ -89,14 +105,17 @@ class L2(Metric):
             raise ValueError(f"{input} must be dir or json file")
         
         assert len(target_list) == len(pred_list), f"the number of images in {input} must be the same"
-        processed_target_list, processed_pred_list = preprocess_list(target_list, pred_list, self.device)
-        
+        # processed_target_list, processed_pred_list = preprocess_list(target_list, pred_list, self.device)
+        processed_target_list = preprocess_list(target_list, self.device)
+        processed_pred_list = preprocess_list(pred_list, self.device)
         score = 0.0
         
         # print(processed_target_list, processed_pred_list)
 
         with torch.no_grad():
             for pred, target in zip(processed_pred_list, processed_target_list):
-                score += self.criterion(pred, target).detach().cpu()
-        score = score / len(processed_target_list)
-        return "L2", score.item(), len(target_list)
+                score = _get_dino_score(pred, target, self.dino_model)
+        score += score / len(processed_target_list)
+        return "DINO", score, len(target_list)
+
+# print(get_ssim_batch("data/", keys=['gt', 'pred']))
