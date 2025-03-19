@@ -97,3 +97,7 @@ Completed
 
 
 Feel free to tweak the config and data formats to suit your needs. Happy benchmarking! 🎯
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=jamjimmy/cv_benchmark_hub&type=Date)](https://www.star-history.com/#jamjimmy/cv_benchmark_hub&Date)
