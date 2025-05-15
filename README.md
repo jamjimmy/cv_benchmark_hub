@@ -1,5 +1,5 @@
 # Computer Vision Benchmark Hub
-[![Outlook](https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white)](mailto:jiangzj453@outlook.com)
+[![Outlook](https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white)](mailto:jiangzj453@foxmail.com)
 
 逻辑较为简单，请参考教程。有问题可以联系我~
 
